@@ -15,6 +15,7 @@ import AllStory from "./views/AllStory/AllStory";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./scss/App.scss";
 import Payment from "views/Payment/Payment";
+import ResultPayment from "views/ResultPayment/ResultPayment";
 function App() {
   return (
     <HashRouter>
@@ -32,7 +33,8 @@ function App() {
         <Route path="truyen/:url/:chapnum" element={<Chapter />} />
         <Route path="tim-kiem" element={<Search />} />
         <Route path="tat-ca" element={<AllStory />} />
-        <Route path="test" element={<Payment />} />
+        <Route path="payment" element={<Payment />} />
+        <Route path="result-payment" element={<ResultPayment />} />
       </Routes>
       <Footer />
       <ToastContainer

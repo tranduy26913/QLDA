@@ -219,6 +219,10 @@ export default function Header() {
                                     className='text-with-icon'>
                                 <i style={{ marginRight: '4px'}} className="bx bx-up-arrow-circle fs-28"></i> Đăng truyện
                             </Link></li>
+                            <li><Link to={'/payment'}
+                                    className='text-with-icon'>
+                                <i style={{ marginRight: '4px'}} className="bx bx-up-arrow-circle fs-28"></i> Nạp tiền
+                            </Link></li>
                             {
                                 user ? <li ref={profileDropdownRef} className='navbar__profile'>
                                     <div >
@@ -231,6 +235,7 @@ export default function Header() {
                                         </div>
                                         <div  tabIndex={"1"} onBlur={hideProfileDropdown} className="navbar__profile__menu">
                                             <ul>
+                                            <li><Link to={'/payment'}>Số dư: {user?.balance}<i className='bx bxs-coin-stack'></i></Link></li>
                                                 {
                                                     menu[user?.roles[0] || 'USER'].map((item, i) => {
                                                         return <li key={i}><Link to={item.path}><i className={item.icon}></i>{item.display}</Link></li>

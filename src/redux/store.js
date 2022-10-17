@@ -12,7 +12,7 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/es/storage'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const rootReducer=combineReducers({auth: authReducer,modal: modalReducer,message:messageReducer})
