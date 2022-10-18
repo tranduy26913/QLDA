@@ -75,7 +75,7 @@ function StoryDetail() {
         setMain(<Rate key={'rate'} />)
         break
       case 'chapter':
-        setMain(<ListChapter key={'chapter'} url={truyen.url} totalPage={truyen.sochap} />)
+        setMain(<ListChapter key={'chapter'} url={truyen.url} totalPage={truyen.numberofchapter} />)
         break
       case 'comment':
         setMain(<Comment key={'comment'} url={truyen.url} />)
@@ -151,22 +151,22 @@ function StoryDetail() {
             <div className="heroSide row">
               <div className='heroSide__img'>
                 <div className="img-wrap">
-                  <img src={truyen?.hinhanh} alt="" />
+                  <img src={truyen?.image} alt="" />
                 </div>
               </div>
 
               <div className="heroSide__main">
                 <div className="heroSide__main__title">
-                  <h2 >{truyen?.tentruyen}</h2>
+                  <h2 >{truyen?.name}</h2>
                 </div>
                 <ul className='heroSide__main__info row'>
-                  <li className={liClass}>{truyen?.tacgia}</li>
-                  <li className={liClass}>{truyen?.trangthai}</li>
-                  <li className={liClass}>{truyen?.theloai}</li>
+                  <li className={liClass}>{truyen?.author}</li>
+                  <li className={liClass}>{truyen?.status}</li>
+                  <li className={liClass}>{truyen?.type}</li>
                 </ul>
                 <ul className="heroSide__main__statistic row">
                   <li>
-                    <span className='fs-16 bold'>{truyen?.sochap || '0'}</span>
+                    <span className='fs-16 bold'>{truyen?.numberofchapter || '0'}</span>
                     <span>Chương</span>
                   </li>
                   <li>
@@ -183,12 +183,12 @@ function StoryDetail() {
 
                 <div className="heroSide__main__rate">
                   <div className="heroSide__main__rate-wrap fs-16 d-flex">
-                    <span className={`bx ${truyen?.danhgia >= 1 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span className={`bx ${truyen?.danhgia >= 2 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span className={`bx ${truyen?.danhgia >= 3 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span className={`bx ${truyen?.danhgia >= 4 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span className={`bx ${truyen?.danhgia >= 5 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span>&nbsp;{truyen?.danhgia}/5   ({truyen?.soluongdanhgia} đánh giá)</span>
+                    <span className={`bx ${truyen?.rating >= 1 ? 'bxs-star' : 'bx-star'}`}></span>
+                    <span className={`bx ${truyen?.rating >= 2 ? 'bxs-star' : 'bx-star'}`}></span>
+                    <span className={`bx ${truyen?.rating >= 3 ? 'bxs-star' : 'bx-star'}`}></span>
+                    <span className={`bx ${truyen?.rating >= 4 ? 'bxs-star' : 'bx-star'}`}></span>
+                    <span className={`bx ${truyen?.rating >= 5 ? 'bxs-star' : 'bx-star'}`}></span>
+                    <span>&nbsp;{truyen?.rating}/5   ({truyen?.numberofrating} đánh giá)</span>
                   </div>
 
                 </div>
@@ -252,7 +252,7 @@ function StoryDetail() {
 const About = props => {
   return (<>
     <p>
-      {props.truyen?.noidung}
+      {props.truyen?.description}
     </p>
   </>)
 }
@@ -294,9 +294,9 @@ export const ListChapter = props => {
             
               {
               chapters.map((item, index) => {
-                return <Link to={`/truyen/${url}/${item.chapnumber}`}
+                return <Link to={`/truyen/${url}/${item.chapternumber}`}
                   key={index} className='text-overflow-1-lines'
-                  style={{ "fontSize": `${props.fontsize || 16}px` }}>{item.tenchap}</Link>
+                  style={{ "fontSize": `${props.fontsize || 16}px` }}>{item.chaptername}</Link>
               })
             }
             

@@ -5,6 +5,7 @@ import Layout from "components/Layout/Layout";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { numWithCommas } from "utils/convertNumber";
+import { useSelector } from "react-redux";
 const data = [
   {
     id: 1,
@@ -28,8 +29,11 @@ const data = [
   },
 ];
 const Payment = () => {
+
+  const user = useSelector(state=>state.auth.login.user)
+
   const redirectMomo = (amount) => {
-    makePaymentMomo({ orderId: uuidv4(), amount }).then((result) => {
+    makePaymentMomo({ orderId: uuidv4(), amount,username:user.username }).then((result) => {
       if (result.payUrl) {
         window.location.replace(result.payUrl);
       } else {

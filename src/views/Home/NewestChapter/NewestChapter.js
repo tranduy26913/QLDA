@@ -37,16 +37,16 @@ const [newUpdate,setNewUpdate]  = useState(Array.from(Array(10).keys(),i=>undefi
                    <tr key={i}>
                      {
                         item?<>
-                    <td><span className='text-overflow-1-lines text-secondary'>{item.theloai}</span></td>
+                    <td><span className='text-overflow-1-lines text-secondary'>{item.type}</span></td>
                     <td className='w-25'>
                       <Link to={`truyen/${item.url}`}>
-                      <span className='text-overflow-1-lines fw-6'>{item.tentruyen}</span>
+                      <span className='text-overflow-1-lines fw-6'>{item.name}</span>
                       </Link></td>
                     <td className='w-25'>
-                      <Link to={`truyen/${item.url}/${item.chapnumber}`}><span className='text-overflow-1-lines'>{item.tenchap}</span></Link>
+                      <Link to={`truyen/${item.url}/${item.chapternumber}`}><span className='text-overflow-1-lines'>{item.chaptername}</span></Link>
                     </td>
                     <td><span className='text-overflow-1-lines'>{item.tacgia}</span></td>
-                    <td><span className='text-overflow-1-lines text-secondary'>{item.nguoinguoidang}</span></td>
+                    <td><span className='text-overflow-1-lines text-secondary'>{item.author}</span></td>
                     <td><span className='text-overflow-1-lines text-secondary'>
                       {moment(item.updateAt).fromNow()}</span></td></>
                       :<td>
