@@ -1,4 +1,4 @@
-import { axiosClient, axiosInstance } from "./axiosClient";
+import { axiosClient, axiosInstance,axiosClientWithToken } from "./axiosClient";
 import getData from './getData'
 const apiMain = {
 
@@ -59,8 +59,8 @@ const apiMain = {
         return getData(res);
 
     },
-    getNameChapters: async (url, params) => {
-        const res = await axiosClient.get(`/novels/novel/${url}/mucluc`, { params: params });
+    getNameChapters: async (url, params,user) => {
+        const res = await axiosClient.get(`/novels/novel/${url}/mucluc`,{ params: params,headers: { Authorization: `Bearer ${user?.accessToken}` } });
         return getData(res);
     },
     getChapterByNumber: async (tentruyen, chapnum) => {

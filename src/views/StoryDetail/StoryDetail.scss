@@ -160,4 +160,9 @@
     @include mobile {
         display: block;
     }
+    &__modal {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 }

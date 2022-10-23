@@ -8,6 +8,7 @@ import { loginSuccess } from '../../redux/authSlice'
 import "./Chapter.scss"
 import { ListChapter } from '../StoryDetail/StoryDetail'
 import Skeleton from 'react-loading-skeleton';
+import { toast } from 'react-toastify'
 
 function Chapter(props) {
     const { chapnum, url } = useParams()
@@ -61,7 +62,11 @@ function Chapter(props) {
                         setChapter(getData(res))
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.log(err.response)
+                        if(err.response.data.details.message ==='Bạn chưa mở khoá chương'){
+                        toast.warning('Bạn chưa mở khoá chương')
+                        navigate('/truyen/'+url)
+                        }
                     })
             }
             else{
