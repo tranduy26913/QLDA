@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Layout from '../../components/Layout/Layout'
 import './StoryDetail.scss'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import apiMain from '../../api/apiMain'
 import LoadingData from '../../components/LoadingData/LoadingData'
 import Grid from '../../components/Grid/Grid'
@@ -12,32 +12,34 @@ import { loginSuccess } from '../../redux/authSlice'
 import { toast } from 'react-toastify'
 import Loading from '../../components/Loading/Loading'
 import Modal, { ModalContent } from '../../components/Modal/Modal'
+import {unlockChapter} from 'api/apiPayment'
+import getData from 'api/getData'
 
 const nav = [//navigate
   {
     path: 'about',
     display: 'Giới thiệu',
-    mobile:'show'
+    mobile: 'show'
   },
   {
     path: 'rate',
     display: 'Đánh giá',
-    mobile:'show'
+    mobile: 'show'
   },
   {
     path: 'chapter',
     display: 'Ds Chương',
-    mobile:'hide'
+    mobile: 'hide'
   },
   {
     path: 'comment',
     display: 'Bình luận',
-    mobile:'show'
+    mobile: 'show'
   },
   {
     path: 'donate',
     display: 'Hâm mộ',
-    mobile:'hide'
+    mobile: 'hide'
   }
 ]
 
@@ -221,8 +223,8 @@ function StoryDetail() {
                 {
                   nav.map((item, index) => {
                     return (
-                      <li 
-                       className={`navigate__tab fs-20 bold ${active === index ? 'tab_active' : ''} ${item.mobile==='hide'?'mobileHide':''}`}
+                      <li
+                        className={`navigate__tab fs-20 bold ${active === index ? 'tab_active' : ''} ${item.mobile === 'hide' ? 'mobileHide' : ''}`}
                         key={index}
                         data={item.path}
                         onClick={onClickTab}
@@ -239,7 +241,7 @@ function StoryDetail() {
         }
       </div>
       {listchapter && <Modal active={listchapter}>
-        <ModalContent onClose={onCloseModalListChapter} style={{width:'100%'}}>
+        <ModalContent onClose={onCloseModalListChapter} style={{ width: '100%' }}>
           <ListChapter key={'chapter'} url={truyen.url} />
         </ModalContent>
       </Modal>}
@@ -267,8 +269,16 @@ export const ListChapter = props => {
   const [chapters, setChapters] = useState([])
   const [loadingData, setLoadingData] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
+  const [isUnlockChapter, setIsUnlockChapter] = useState(false)
+  const [loading,setLoading] = useState(false)
+  const [id,setId] = useState('')
+  const [chapnum,setChapnum] = useState(1)
   const size = 20;
   const url = props.url
+  const user = useSelector(state => state.auth.login?.user)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   useEffect(() => {
     const loadList = async () => {//xử lý gọi API danh sách truyện
       const params = {//payload
@@ -276,7 +286,7 @@ export const ListChapter = props => {
         size: 20
       }
 
-      apiMain.getNameChapters(props.url, params).then(res => {
+      apiMain.getNameChapters(props.url, params,user).then(res => {
         setChapters(res)
         setLoadingData(false)
       })
@@ -284,6 +294,41 @@ export const ListChapter = props => {
     loadList()//gọi hàm
   }, [props.url, currentPage])
 
+  const handleChapterLock = (e,id,chapnumber) => {
+    e.preventDefault()
+    setIsUnlockChapter(true)
+    setId(id)
+    setChapnum(chapnumber)
+  }
+  const handleUnlock = () => {
+    if (user) {
+      setLoading(true)
+      unlockChapter(user,{id})
+      .then(res=>{
+        toast.success("Mở khoá truyện thành công")
+        updateUser()
+        setIsUnlockChapter(false)
+        navigate(`/truyen/${url}/${chapnum}`)
+      })
+      .catch(err=>{
+        toast.warning("Mở khoá truyện không thành công")
+
+      })
+      .finally(()=>setLoading(false))
+    } else {
+      toast.warning("Vui lòng đăng nhập trước khi mở khoá truyện", {
+        hideProgressBar: true,
+        pauseOnHover: false,
+        autoClose: 1200
+      })
+    }
+  }
+
+  const updateUser = async()=>{
+    const res = getData(await apiMain.getUserInfo(user, dispatch, loginSuccess));
+    const {balance} = res.userInfo
+    dispatch(loginSuccess({...user,balance}))
+  }
 
   return (
     <>
@@ -291,19 +336,40 @@ export const ListChapter = props => {
       {
         loadingData ? <LoadingData /> :
           <Grid gap={15} col={props.col || 3} smCol={1}>
-            
-              {
-              chapters.map((item, index) => {
-                return <Link to={`/truyen/${url}/${item.chapternumber}`}
-                  key={index} className='text-overflow-1-lines'
-                  style={{ "fontSize": `${props.fontsize || 16}px` }}>{item.chaptername}</Link>
-              })
+
+            {
+              chapters.map((item, index) => <Link to={`/truyen/${url}/${item.chapternumber}`}
+                key={index} className='text-overflow-1-lines'
+                onClick={item.isLock && !item.unlock ? e=>handleChapterLock(e,item._id,item.chapternumber) : undefined}
+                style={{ "fontSize": `${props.fontsize || 16}px` }}>
+                  {item.chaptername} {item.isLock && !item.unlock && <i className='bx bx-lock'></i>}
+              </Link>
+              )
             }
-            
-            
           </Grid>
       }
-      <Pagination totalPage={props.totalPage/size} currentPage={currentPage} handleSetPage={setCurrentPage} />
+
+      {
+        isUnlockChapter &&
+        <Modal active={isUnlockChapter}>
+          <ModalContent onClose={() => setIsUnlockChapter(false)}>
+
+            <div className='auth-wrap'>
+              <div className="auth-header">
+                <h4>Mở khoá chương truyện</h4>
+              </div>
+              <div className="auth-body">
+                <div className="listchapter__modal">
+                  <p className="">Bạn có muốn dùng 200 coin để mở khoá chương này không?</p>
+                  <button className='btn-primary' onClick={handleUnlock}>{loading&& <Loading/>}Mở khoá</button>
+                </div>
+              </div>
+            </div>
+          </ModalContent>
+        </Modal>}
+
+
+      <Pagination totalPage={props.totalPage / size} currentPage={currentPage} handleSetPage={setCurrentPage} />
 
     </>
   )

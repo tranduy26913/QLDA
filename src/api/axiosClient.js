@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { logoutSuccess } from '../redux/authSlice';
 //const baseURL='https://thichtruyenchu.herokuapp.com/api'
 //const baseURL = 'http://localhost:5000/api'
-const baseURL = 'https://becnpmm.cyclic.app/api'
+const baseURL = 'https://becnpmm.vercel.app/api'
 export const axiosClient = axios.create({
     baseURL: baseURL,
 
@@ -19,11 +19,56 @@ export const axiosClient = axios.create({
 });
 
 
-
+export const axiosClientWithToken = axios.create({
+    baseURL: baseURL,
+    headers: {
+        "Content-Type": "application/json"
+    },
+    withCredentials: true,
+    paramsSerializer: (params) => queryString.stringify(params)
+});
 const refreshToken = async (user) => {
     const res = await axiosClient.post('/auth/refreshtoken', { refreshToken: user.refreshToken }, { headers: { Authorization: `Bearer ${user.accessToken}` }, })
     console.log(res)
     return res.data
+}
+
+var myInterceptor = null;
+export const axiosInstance2 = (user, dispatch, stateSuccess,stateFail) => {
+    axiosClientWithToken.interceptors.request.eject(myInterceptor)
+    myInterceptor = axiosClientWithToken.interceptors.request.use(
+        async (config) => {
+            let date = new Date();
+            if(!(user.refreshToken)){
+                return config;
+            }
+            const decodeToken = jwt_decode(user.accessToken);
+            
+            if (decodeToken.exp < date.getTime() / 1000) {
+                try{
+                    const response = getData(await refreshToken(user.refreshToken))
+
+                    const newUser = {
+                        ...user,
+                        accessToken: response.accessToken
+                    }
+                    dispatch(stateSuccess(newUser))
+                    config.headers['Authorization'] = `Bearer ${response.accessToken}`;
+                }
+                catch(err){
+                    let msg = err?.response?.data?.details?.message || "Hết phiên đăng nhập"
+                    toast.error(msg);
+                    dispatch(stateFail())
+                }
+            }else{
+                config.headers['Authorization'] = `Bearer ${user.accessToken}`;
+            }
+            return config;
+        },
+        err => {
+            return Promise.reject(err)
+        }
+    );
 }
 
 export const axiosInstance = (user, dispatch, stateSuccess) => {

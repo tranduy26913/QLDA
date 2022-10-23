@@ -25,7 +25,7 @@ function Profile({userInfo,changeUserInfo}) {
   useEffect(() => {
     const loadUserInfo = async() => {//load thông tin của user
       if (userInfo) {
-        setName(userInfo?.tenhienthi)
+        setName(userInfo?.nickname)
         setBirthDate(userInfo?.birthdate?new Date(userInfo?.birthdate):new Date())
         setPreview(userInfo?.image)
         setLoadingUser(false)

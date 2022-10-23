@@ -16,7 +16,16 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "./scss/App.scss";
 import Payment from "views/Payment/Payment";
 import ResultPayment from "views/ResultPayment/ResultPayment";
+import {useDispatch,useSelector} from 'react-redux'
+import {loginSuccess, logoutSuccess} from './redux/authSlice'
+import {axiosInstance2} from './api/axiosClient'
 function App() {
+  const user = useSelector(state => state.auth.login?.user)
+  const dispatch = useDispatch();
+  if (user) {
+    axiosInstance2(user, dispatch, loginSuccess, logoutSuccess);
+
+  }
   return (
     <HashRouter>
       <Header />
