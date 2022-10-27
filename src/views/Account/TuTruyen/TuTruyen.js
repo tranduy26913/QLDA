@@ -64,16 +64,16 @@ const Readings = ({ dispatch,user }) => {
       }
     }
     LoadReading()
-  }, [user,dispatch])
+  }, [user])
 
   return (
     <div>
       {
         readings.map((item, i) => <div key={i} >
           <Reading  data={{
-            tentruyen: item.tentruyen,
-            hinhanh: item.hinhanh,
-            dadoc: item.chapnumber,
+            tentruyen: item.name,
+            hinhanh: item.image,
+            dadoc: item.chapternumber,
             total: item.sochap,
             url: item.url
           }} />

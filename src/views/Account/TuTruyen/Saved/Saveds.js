@@ -25,9 +25,9 @@ const Saveds = ({ dispatch,user }) => {
         {
           readings.map((item, i) => <div key={item.url} >
             <Saved data={{
-              tentruyen: item.tentruyen,
-              hinhanh: item.hinhanh,
-              tacgia: item.tacgia,
+              tentruyen: item.name,
+              hinhanh: item.image,
+              tacgia: item.author,
               url: item.url
             }} />
               <hr /></div>)

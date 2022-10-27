@@ -4,15 +4,16 @@ import { loginSuccess } from '../../../../redux/authSlice'
 import Grid from '../../../../components/Grid/Grid'
 import { toast } from 'react-toastify'
 import AddChapter from './AddChapter'
+import { useSelector } from 'react-redux'
 
-const ListChap = ({ url, user, dispatch,onClickBackFromListChap }) => {
+const ListChap = ({ url, dispatch,onClickBackFromListChap }) => {
     const [chapters, setChapters] = useState([])
     const [addChap, setAddChap] = useState(false)
-    const [chapnumber, setChapnumber] = useState(null)
+    const [chapternumber, setChapternumber] = useState(null)
+    const user = useSelector(state => state.auth.login.user)
     
-    
-    const onClickUpdateChap = (e) => {
-      setChapnumber(e.target.name)
+    const onClickUpdateChap = (value) => {
+      setChapternumber(value)
       setAddChap(true)
     }
     const onClickDeleteChap = (e) => {
@@ -31,7 +32,7 @@ const ListChap = ({ url, user, dispatch,onClickBackFromListChap }) => {
     
 
     const getChapter = useCallback(async () => {
-      apiMain.getNameChapters(url, {size:20})
+      apiMain.getNameChapters(url, {size:20},user)
         .then(res => {
           setChapters(res)
         })},[url])
@@ -44,11 +45,11 @@ const ListChap = ({ url, user, dispatch,onClickBackFromListChap }) => {
     const onClickAddChapter = (e) => {
       e.preventDefault()
       setAddChap(true)
-      setChapnumber(null)
+      setChapternumber(null)
     }
     return (
       <>{
-        addChap ? <AddChapter url={url} chapnumber={chapnumber} user={user} dispatch={dispatch}
+        addChap ? <AddChapter url={url} chapnumber={chapternumber} user={user} dispatch={dispatch}
          onClickBackFromAddChap={()=>{setAddChap(false)}}
          getChapters={getChapter} /> :
   
@@ -62,14 +63,14 @@ const ListChap = ({ url, user, dispatch,onClickBackFromListChap }) => {
               {
                 chapters.map((item, index) => {
                   return (
-                    <div key={item.chapnumber}>
+                    <div key={item.chapternumber}>
                     <div className='d-flex'>
                       <div className="col-10 d-flex" style={{'alignItems':'center'}}>
-                        <h4 key={item.chapnumber} name={item.chapnumber} className='text-overflow-1-lines'>{item.tenchap}</h4>
+                        <h4 key={item.chapternumber} name={item.chapternumber} className='text-overflow-1-lines'>{item.chaptername}</h4>
                       </div>
                       <div className="col-2">
-                        <span className="text-with-icon" onClick={onClickUpdateChap} name={item.chapnumber}><i className='bx bx-edit' ></i> Sửa</span>
-                        <span className="text-with-icon" onClick={onClickDeleteChap} name={item.chapnumber}><i className='bx bx-trash' ></i> Xoá</span>
+                        <span className="text-with-icon" onClick={()=>onClickUpdateChap(item.chapternumber)}><i className='bx bx-edit' ></i> Sửa</span>
+                        <span className="text-with-icon" onClick={()=>onClickDeleteChap(item.chapternumber)} ><i className='bx bx-trash' ></i> Xoá</span>
                       </div>
                     </div><hr/></div>
                     )

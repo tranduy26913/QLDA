@@ -47,6 +47,7 @@ const apiMain = {
     },
     getStorysByUsername: async (params) => {
         const res = await axiosClient.get(`/novels/created`, { params: params });
+        console.log(res)
         return getData(res);
     },
     getStory: async (params) => {

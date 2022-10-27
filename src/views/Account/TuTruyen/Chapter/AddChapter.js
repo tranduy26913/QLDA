@@ -10,6 +10,7 @@ const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAddChap, g
   const [content, setContent] = useState("")
   const [tenchuong, setTenchuong] = useState("")
   const [edit, setEdit] = useState(false)
+  console.log(chapnumber)
   const onChangeTenchuong = (e) => {
     setTenchuong(e.target.value)
   }
@@ -20,7 +21,7 @@ const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAddChap, g
         apiMain.getChapterByNumber(url, chapnumber)
           .then(res => {
             setContent(res.content)
-            setTenchuong(res.tenchap)
+            setTenchuong(res.chaptername)
             setEdit(true)
           })
       }

@@ -28,11 +28,11 @@ function EditStory({ url, user, dispatch, onClickBackFromEditNovel }) {
             if (url) {
                 apiMain.getStory({ url })
                     .then(res => {
-                        setPreview(res.hinhanh)
-                        setName(res.tentruyen)
-                        setDescription(res.noidung)
-                        setTheloai(res.theloai)
-                        setTacgia(res.tacgia)
+                        setPreview(res.image)
+                        setName(res.name)
+                        setDescription(res.description)
+                        setTheloai(res.type)
+                        setTacgia(res.author)
                         setId(res._id)
                         setLoadingStory(false)
                     })

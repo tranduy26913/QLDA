@@ -21,9 +21,10 @@ const StoryCreated = ({ userInfo }) => {
     }, [userInfo])
   
     const getStories = async()=>{
-      apiMain.getStorysByUsername({ username: user?.username })
+      apiMain.getStorysByUsername({ id: user?.id })
       .then(res => {
         setStorys(res)
+        
       })
       .catch(err => {
         console.log(err)
@@ -35,9 +36,9 @@ const StoryCreated = ({ userInfo }) => {
       setEditNovel(true)
       setUrl(e.target.getAttribute('data-url'))
     }
-    const onClickDeleteStory = (e) => {
-      if(e.target.getAttribute('data-url')) {
-        apiMain.deleteNovel({url: e.target.getAttribute('data-url') }, user, dispatch, loginSuccess)
+    const onClickDeleteStory = (value) => {
+      if(value) {
+        apiMain.deleteStory({url: value }, user, dispatch, loginSuccess)
           .then(res => {
             getStories()
             toast.success(res.message)
@@ -68,15 +69,15 @@ const StoryCreated = ({ userInfo }) => {
             return (<div key={data.url}>
               <div  className="reading-card">
                 <div className="reading-card__img-wrap">
-                  <img src={data.hinhanh} alt="" />
+                  <img src={data.image} alt="" />
                 </div>
                 <div className="reading-card__content">
                   <h4 onClick={onClickTruyen} data-url={data?.url} className="reading-card__title">
-                    {data.tentruyen}
+                    {data.name}
                   </h4>
                   <div className="d-flex" style={{'gap':'15px'}}>
                     <span className="text-with-icon" onClick={onClickUpdateStory} data-url={data.url}><i className='bx bx-edit' ></i> Sửa</span>
-                    <span className="text-with-icon" onClick={onClickDeleteStory} data-url={data.url}><i className='bx bx-trash' ></i> Xoá</span>
+                    <span className="text-with-icon" onClick={()=>onClickDeleteStory(data.url)} ><i className='bx bx-trash' ></i> Xoá</span>
   
                   </div>
                 </div>
