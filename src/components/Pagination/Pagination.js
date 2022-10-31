@@ -26,7 +26,7 @@ function Pagination({ totalPage, currentPage, handleSetPage }) {//Component phâ
             }
             setItem(temp)
         }
-    }, [currentPage])
+    }, [currentPage,totalPage])
 
 
     const onClickPage = (e) => {//xử lý đổi trang

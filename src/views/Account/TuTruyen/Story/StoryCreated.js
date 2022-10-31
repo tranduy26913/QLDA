@@ -1,24 +1,24 @@
 import { useState,useEffect ,useCallback} from "react"
 import { useSelector, useDispatch} from "react-redux"
 import { toast } from "react-toastify"
-import apiMain from "../../../../api/apiMain"
-import { loginSuccess } from "../../../../redux/authSlice"
-import getData from "../../../../api/getData"
+import apiMain from "api/apiMain"
+import getData from "api/getData"
 import ListChap from "../Chapter/ListChap"
 import EditStory from "./EditStory"
 
 
-const StoryCreated = ({ userInfo }) => {
+const StoryCreated = () => {
     const [storys, setStorys] = useState([])
     const [listChap, setListChap] = useState(false)
     const [editNovel, setEditNovel] = useState(false)
-    const user = useSelector(state => state.auth.login.user)
+    const user = useSelector(state => state.user.info)
     const dispatch = useDispatch()
     const [url, setUrl] = useState('')
 
     useEffect(() => {
       getStories()
-    }, [userInfo])
+       // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [user])
   
     const getStories = async()=>{
       apiMain.getStorysByUsername({ id: user?.id })
@@ -38,7 +38,7 @@ const StoryCreated = ({ userInfo }) => {
     }
     const onClickDeleteStory = (value) => {
       if(value) {
-        apiMain.deleteStory({url: value }, user, dispatch, loginSuccess)
+        apiMain.deleteStory({url: value })
           .then(res => {
             getStories()
             toast.success(res.message)

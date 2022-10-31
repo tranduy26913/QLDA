@@ -6,11 +6,11 @@ import Layout from "components/Layout/Layout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LoadingData from "components/LoadingData/LoadingData";
 import { useDispatch, useSelector } from "react-redux";
-import { updateBalance } from "redux/authSlice";
+import { updateBalance } from "redux/userSlice";
 
 const ResultPayment = () => {
   const query = useSearchParams()[0]
-  const user = useSelector(state => state.auth.login.user)
+  const user = useSelector(state => state.user.info)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
@@ -25,6 +25,7 @@ const ResultPayment = () => {
       }
     }
     getBalance()
+     // eslint-disable-next-line react-hooks/exhaustive-deps 
   },[])
 
   return (

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import apiMain from '../../../../api/apiMain'
-import { loginSuccess } from '../../../../redux/authSlice'
+import apiMain from 'api/apiMain'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify'
-import getData from '../../../../api/getData'
+import getData from 'api/getData'
 
-const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAddChap, getChapters }) => {
+const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) => {
   const [content, setContent] = useState("")
   const [tenchuong, setTenchuong] = useState("")
   const [edit, setEdit] = useState(false)
-  console.log(chapnumber)
+
   const onChangeTenchuong = (e) => {
     setTenchuong(e.target.value)
   }
@@ -35,7 +34,7 @@ const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAddChap, g
       toast.warning("Nội dung chương phải dài hơn 10 kí tự");
       return
     }
-    apiMain.createChapter(params, user, dispatch, loginSuccess)
+    apiMain.createChapter(params)
       .then(res => {
         getChapters()
         toast.success("Thêm chương thành công")
@@ -49,7 +48,7 @@ const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAddChap, g
       toast.warning("Nội dung chương phải dài hơn 10 kí tự");
       return
     }
-    apiMain.updateChapter(params, user, dispatch, loginSuccess)
+    apiMain.updateChapter(params)
       .then(res => {
         getChapters()
         toast.success("Sửa truyện thành công")

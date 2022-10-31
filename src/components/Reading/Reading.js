@@ -17,7 +17,7 @@ function Reading(props) {
         }
         
         {
-          data.dadoc ?
+          data?.dadoc !== undefined?
             <div className="reading-card__chap">
               Đã đọc: {data.dadoc}/{data?.total}
             </div> : <Skeleton />

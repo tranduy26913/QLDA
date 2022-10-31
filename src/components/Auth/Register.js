@@ -2,9 +2,9 @@ import Loading from '../Loading/Loading'
 import { useState, useReducer } from 'react'
 import apiMain from '../../api/apiMain';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { handleRegister } from '../../handle/handleAuth';
-import { isAsyncThunkAction } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 
 function Register(props) {
     const loading = useSelector(state => state.message.loading)
@@ -15,8 +15,9 @@ function Register(props) {
 
     const msgRegister = useSelector(state => state.message.register?.msg)
 
-
-    const [message, dispatch] = useReducer(registerReducer, initialValidate);
+const dispatch = useDispatch()
+const navigate = useNavigate()
+    const [message, dispatchReg] = useReducer(registerReducer, initialValidate);
 
     const onRegister = async (e) => {//Xử lý gọi API Sign up
         e.preventDefault();
@@ -29,33 +30,35 @@ function Register(props) {
             password: passwordRegister,
             email: emailRegister
         };
-        await handleRegister(user, props.dispatch, props.navigate); //gọi hàm sign up
+        await handleRegister(user, dispatch, navigate); //gọi hàm sign up
     }
 
     const onChangeEmail = debounce(async (e) => {//validate email
         let email = e.target.value
         setEmailRegister(email)
         const payload = await validateEmail(email)
-        dispatch({ type: "EMAIL", payload: payload })
+        dispatchReg({ type: "EMAIL", payload: payload })
     }, 500)
 
     const onChangeUsername = debounce(async (e) => {//validate username
         let username = e.target.value
         setUsernameRegister(username)
         console.log(username)
-        dispatch({ type: "USERNAME", payload: await validateUsername(username) })
+        dispatchReg({ type: "USERNAME", payload: await validateUsername(username) })
     }, 500)
 
     const onChangePassword = (e) => {//validate password
         let password = e.target.value
         setPasswordRegister(password)
-        dispatch({ type: "PASSWORD", payload: validatePassword(password) })
+        dispatchReg({ type: "PASSWORD", payload: validatePassword(password) })
+        dispatchReg({ type: "PASSWORDCONFIRM", payload: validatePasswordCf(password,passwordCfRegister) })
     }
 
     const onChangePasswordCf = (e) => {//validate password confirm
         let passwordcf = e.target.value
         setPasswordCfRegister(passwordcf)
-        dispatch({ type: "PASSWORDCONFIRM", payload: validatePasswordCf(passwordRegister,passwordcf) })
+        dispatchReg({ type: "PASSWORD", payload: validatePassword(passwordRegister) })
+        dispatchReg({ type: "PASSWORDCONFIRM", payload: validatePasswordCf(passwordRegister,passwordcf) })
     }
 
     return (
@@ -97,7 +100,7 @@ function Register(props) {
                             onChange={onChangePasswordCf}
                         />
                     </div>
-                    <span className={`${message.passwordcf ? 'success' : 'error'}`}>{message.passwordcf.message}</span>
+                    <span className={`${message.passwordcf.valid ? 'success' : 'error'}`}>{message.passwordcf.message}</span>
                 </div>
                 <span>{msgRegister}</span>
                 <button onClick={onRegister}>{loading ? <Loading /> : ""}Đăng ký</button>
@@ -196,11 +199,13 @@ const validateUsername = async (username) => {
 }
 
 const validatePassword = (password) => {
-    if (password.length > 7) {
+
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");//regex kiểm tra mật khẩu hợp lệ
+    if (strongRegex.test(password)) {
         return { valid: true, message: "Mật khẩu hợp lệ" }
     }
     else
-        return { valid: false, message: "Mật khẩu phải dài hơn 7 ký tự" }
+        return { valid: false, message: "Mật khẩu phải có ít nhất 8 kí tự. Chứa kí tự thường, kí tự hoa và số" }
 }
 
 const validatePasswordCf = (password, passwordcf) => {

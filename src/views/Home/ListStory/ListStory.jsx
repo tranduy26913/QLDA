@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react'
-import apiMain from '../../../api/apiMain';
-import Reading from '../../../components/Reading/Reading';
-import Section, { SectionHeading, SectionBody } from '../../../components/Section/Section';
-import Story from '../../../components/Story/Story';
-import getData from '../../../api/getData';
-import { useDispatch, useSelector } from 'react-redux';
+import apiMain from 'api/apiMain';
+import Reading from 'components/Reading/Reading';
+import Section, { SectionHeading, SectionBody } from 'components/Section/Section';
+import Story from 'components/Story/Story';
+import getData from 'api/getData';
+import {  useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
-import { loginSuccess } from '../../../redux/authSlice'
 import './ListStory.scss'
 
 function ListStory() {
 
   const [datas, setData] = useState(Array.from(Array(6).keys(), i=>{return {}}));
   const [readings, setReadings] = useState(Array.from(Array(6).keys(), i=>{return {}}))
-  const user = useSelector(state => state.auth.login.user)
-  const dispatch = useDispatch()
+  const user = useSelector(state => state.user.info)
 
   useEffect(() => {
     
@@ -23,7 +21,7 @@ function ListStory() {
       console.log(readingsDefault)
       if (user) {
         if(readingsDefault){
-          apiMain.getReadings(user, dispatch, loginSuccess)
+          apiMain.getReadings()
             .then(res => {
               if(res.length<10){
                 res = [...res,...readingsDefault].slice(0,8)
@@ -52,7 +50,7 @@ function ListStory() {
       }
     }
     getReadings();//gọi hàm
-  }, [user, dispatch])
+  }, [user])
 
   useEffect(() => {
     const getStory = async () => {//xử lý gọi hàm load truyện
@@ -87,9 +85,9 @@ function ListStory() {
             <SectionBody>
             <div className='list-reading'>
                 {readings.map((item, i) => <Reading key={12+i} data={{
-                  tentruyen: item.tentruyen,
-                  hinhanh: item.hinhanh,
-                  dadoc: item.chapnumber,
+                  tentruyen: item.name,
+                  hinhanh: item.image,
+                  dadoc: item.chapternumber,
                   total: item.sochap,
                   url: item.url
                 }} />)}
@@ -103,16 +101,5 @@ function ListStory() {
 
   )
 }
-
-
-const listReadingDefault = [
-  {
-    tentruyen:"Tử Thần Chi Tiễn",
-    url:"tu-than-chi-tien",
-    hinhanh:"https://static.8cache.com/cover/o/eJzLyTDW1y0qKncOMPYKcXQy0Q9zSktPjaxw987y1HeEguzQSP3kxDCDTLeywDJTC_1yI0NT3QxjIyMAV8wSdQ==/tu-than-chi-tien.jpg"
-
-  }
-]
-
 
 export default ListStory

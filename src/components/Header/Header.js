@@ -9,6 +9,7 @@ import { authLoginActive, authRegisterActive, authInactive } from '../../redux/m
 import { handleLogout } from '../../handle/handleAuth';
 import { setQuery } from '../../redux/messageSlice';
 import './Header.scss'
+import { numWithCommas } from 'utils/convertNumber';
 
 const menu = {//menu hiển thị cho từng loại tài khoản admin và user thường
     ADMIN: [
@@ -69,7 +70,7 @@ export default function Header() {
     const headerRef = useRef(null)
     const expandRef = useRef(null)
     const profileDropdownRef = useRef(null)
-    const user = useSelector(state => state.auth.login?.user);
+    const user = useSelector(state => state.user.info);
     const modalAuth = useSelector(state => state.modal.auth.active);
     const modalLogin = useSelector(state => state.modal.auth.login);
     const [expand, setExpand] = useState(false)
@@ -184,7 +185,7 @@ export default function Header() {
                             </li>
                             {
                                 user?<>
-                                {menu[user?.roles[0] || 'USER'].map((item, i) =>
+                                {menu['USER'].map((item, i) =>
                                     <li className='text-bold navbar-expand__item' key={i}>
                                         <Link to={item.path}><i className={item.icon}></i>{item.display}</Link>
                                     </li>
@@ -215,7 +216,7 @@ export default function Header() {
                             </div>
                         </div>
                         <ul className='navbar__list navbar__list--right'>
-                            <li><Link to={user?.roles[0] === 'ADMIN' ? '/admin/dang-truyen' : '/user/dang-truyen'}
+                            <li><Link to={'/user/dang-truyen'}
                                     className='text-with-icon'>
                                 <i style={{ marginRight: '4px'}} className="bx bx-up-arrow-circle fs-28"></i> Đăng truyện
                             </Link></li>
@@ -231,13 +232,13 @@ export default function Header() {
                                                 <div className='navbar__avatar'><img src={user.image} alt="" /></div>
                                                 : <i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i>
                                             }
-                                            <span>{ user.tenhienthi ||user.name || user.username}</span>
+                                            <span>{ user.nickname ||user.name || user.username}</span>
                                         </div>
                                         <div  tabIndex={"1"} onBlur={hideProfileDropdown} className="navbar__profile__menu">
                                             <ul>
-                                            <li><Link to={'/payment'}>Số dư: {user?.balance}<i className='bx bxs-coin-stack'></i></Link></li>
+                                            <li><Link to={'/payment'}>Số dư: {numWithCommas(user?.balance||0)}<i className='bx bxs-coin-stack'></i></Link></li>
                                                 {
-                                                    menu[user?.roles[0] || 'USER'].map((item, i) => {
+                                                    menu['USER'].map((item, i) => {
                                                         return <li key={i}><Link to={item.path}><i className={item.icon}></i>{item.display}</Link></li>
                                                     }
                                                     )

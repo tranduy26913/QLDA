@@ -25,7 +25,8 @@ function Active(props) {
                     setMsg("Kích hoạt không thành công")
                 })
         }
-        active();
+        active()
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [token])
 
     useEffect(() => {
@@ -43,6 +44,7 @@ function Active(props) {
             }, 1000)
         }
         countDown();
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [count])
 
     return (

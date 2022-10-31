@@ -2,42 +2,41 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import apiMain from '../../api/apiMain';
-import { loginSuccess } from '../../redux/authSlice';
 import { useSelector, useDispatch } from 'react-redux'
 import avt from '../../assets/img/avt.png'
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { toast } from 'react-toastify';
-import { setLoading } from '../../redux/messageSlice'
 import Loading from '../../components/Loading/Loading';
 import LoadingData from '../../components/LoadingData/LoadingData';
+import { setUserInfo } from 'redux/userSlice';
 
-function Profile({userInfo,changeUserInfo}) {
-  const user = useSelector(state => state.auth.login?.user);
+function Profile() {
+  const user = useSelector(state => state.user.info);
   const [image, setImage] = useState("");
-  const [preview, setPreview] = useState(userInfo?.image || avt)
-  const [name, setName] = useState(userInfo?.tenhienthi || "");
+  const [preview, setPreview] = useState(user?.image || avt)
+  const [name, setName] = useState(user?.tenhienthi || "");
   const [birthDate, setBirthDate] = useState(new Date());
-  const loading = useSelector(state => state.message.loading)
+  const [loading,setLoading] = useState(false)
   const [loadingUser, setLoadingUser] = useState(true)
   const dispatch = useDispatch()
 
   useEffect(() => {
     const loadUserInfo = async() => {//load thông tin của user
-      if (userInfo) {
-        setName(userInfo?.nickname)
-        setBirthDate(userInfo?.birthdate?new Date(userInfo?.birthdate):new Date())
-        setPreview(userInfo?.image)
+      if (user) {
+        setName(user?.nickname)
+        setBirthDate(user?.birthdate?new Date(user?.birthdate):new Date())
+        setPreview(user?.image)
         setLoadingUser(false)
       }
     }
     loadUserInfo();
-  }, [userInfo])
+  }, [user])
 
   const upload = async () => { //upload ảnh lên firebase
     if (image == null)
       return;
-    const storageRef = ref(storage, `/images/${userInfo?.username}`);
+    const storageRef = ref(storage, `/images/${user?.username}`);
     uploadBytes(storageRef, image).then((result) => {
       getDownloadURL(result.ref).then(async (url) => {//lấy liên kết tới ảnh
         const data = {
@@ -52,15 +51,13 @@ function Profile({userInfo,changeUserInfo}) {
 
   const handleSubmitSaveProfile = async (data) => {//xử lý submit lưu thông tin
     try {
-      dispatch(setLoading(true))
-      const update = await apiMain.updateUserInfo(user, dispatch, loginSuccess, data)
-      dispatch(setLoading(false))
+      setLoading(true)
+      const update = await apiMain.updateUserInfo(data)
+      setLoading(false)
       toast.success("Cập nhật thông tin thành công", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
       
-      const newUser ={...user, image:update?.userInfo?.image,tenhienthi:update?.userInfo?.tenhienthi}
-      console.log(newUser)
-      dispatch(loginSuccess(newUser))
-      changeUserInfo(update.userInfo)
+      const newUser ={...user, image:update?.userInfo?.image,nickname:update?.userInfo?.nickname,birthdate:update?.userInfo?.birthdate}
+      dispatch(setUserInfo(newUser))
     } catch (error) {
       console.log(error)
       toast.error("Lỗi cập nhật thông tin", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
@@ -125,7 +122,7 @@ function Profile({userInfo,changeUserInfo}) {
                   </div>
                   <div className="group-info">
                     <label htmlFor="" style={labelStyle}>Email</label>
-                    {<input readOnly value={userInfo?.email || ""}></input>}
+                    {<input readOnly value={user?.email || ""}></input>}
                   </div>
                   <div className="group-info">
                     <label htmlFor="" style={labelStyle}>Ngày sinh</label>

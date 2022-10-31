@@ -1,24 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import apiMain from '../../../../api/apiMain'
-import { loginSuccess } from '../../../../redux/authSlice'
-import Grid from '../../../../components/Grid/Grid'
+import apiMain from 'api/apiMain'
+import Grid from 'components/Grid/Grid'
 import { toast } from 'react-toastify'
 import AddChapter from './AddChapter'
-import { useSelector } from 'react-redux'
 
-const ListChap = ({ url, dispatch,onClickBackFromListChap }) => {
+const ListChap = ({ url,onClickBackFromListChap }) => {
     const [chapters, setChapters] = useState([])
     const [addChap, setAddChap] = useState(false)
     const [chapternumber, setChapternumber] = useState(null)
-    const user = useSelector(state => state.auth.login.user)
     
     const onClickUpdateChap = (value) => {
       setChapternumber(value)
       setAddChap(true)
     }
-    const onClickDeleteChap = (e) => {
-      if (e.target.name) {
-        apiMain.deleteChapter({ url, chapnumber: e.target.name }, user, dispatch, loginSuccess)
+    const onClickDeleteChap = (value) => {
+      if (value) {
+        apiMain.deleteChapter({ url, chapnumber: value })
           .then(res => {
             getChapter()
             toast.success(res.message)
@@ -32,7 +29,7 @@ const ListChap = ({ url, dispatch,onClickBackFromListChap }) => {
     
 
     const getChapter = useCallback(async () => {
-      apiMain.getNameChapters(url, {size:20},user)
+      apiMain.getNameChapters(url, {size:20})
         .then(res => {
           setChapters(res)
         })},[url])
@@ -40,6 +37,7 @@ const ListChap = ({ url, dispatch,onClickBackFromListChap }) => {
     
     useEffect(()=>{
       getChapter()
+       // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [])
   
     const onClickAddChapter = (e) => {
@@ -49,7 +47,7 @@ const ListChap = ({ url, dispatch,onClickBackFromListChap }) => {
     }
     return (
       <>{
-        addChap ? <AddChapter url={url} chapnumber={chapternumber} user={user} dispatch={dispatch}
+        addChap ? <AddChapter url={url} chapnumber={chapternumber} 
          onClickBackFromAddChap={()=>{setAddChap(false)}}
          getChapters={getChapter} /> :
   

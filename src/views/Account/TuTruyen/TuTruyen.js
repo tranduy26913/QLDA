@@ -1,9 +1,8 @@
 
 import  { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import apiMain from '../../../api/apiMain'
-import { loginSuccess } from '../../../redux/authSlice'
-import Reading from '../../../components/Reading/Reading'
+import { useSelector } from 'react-redux'
+import apiMain from 'api/apiMain'
+import Reading from 'components/Reading/Reading'
 import StoryCreated from './Story/StoryCreated'
 import { Route, Routes, Link, useLocation } from 'react-router-dom'
 import Saveds from './Saved/Saveds'
@@ -21,10 +20,8 @@ const nav = [
     display: 'Đã đăng'
   },
 ]
-function TuTruyen({ userInfo }) {
- 
-  const user = useSelector(state => state.auth.login.user)
-  const dispatch = useDispatch()
+function TuTruyen() {
+
   const location = useLocation()
   const active = nav.findIndex(e => e.path === location.pathname.split('/').pop())
   
@@ -40,21 +37,22 @@ function TuTruyen({ userInfo }) {
         }
       </div>
       <Routes>
-        <Route key={'reading'} path='reading' element={<Readings key={'reading'} dispatch={dispatch} user={user} />} />
-        <Route key={'saved'} path='saved' element={<Saveds key={'saved'}  dispatch={dispatch} user={user} />} />
-        <Route key={'created'} path='created' element={<StoryCreated key={'created'} userInfo={userInfo} />} />
+        <Route key={'reading'} path='reading' element={<Readings key={'reading'}/>} />
+        <Route key={'saved'} path='saved' element={<Saveds key={'saved'} />} />
+        <Route key={'created'} path='created' element={<StoryCreated key={'created'}/>} />
       </Routes>
 
 
     </>
   )
 }
-const Readings = ({ dispatch,user }) => {
+const Readings = () => {
   const [readings, setReadings] = useState([])
+  const user = useSelector(state=>state.user.info)
   useEffect(()=>{
     const LoadReading = async () => {
       if (user) {
-        apiMain.getReadings(user, dispatch, loginSuccess)
+        apiMain.getReadings()
           .then(res => {
             setReadings(res)
           })

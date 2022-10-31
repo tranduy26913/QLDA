@@ -1,23 +1,21 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState, useRef } from 'react'
+import {  useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import apiMain from '../../api/apiMain'
-import getData from '../../api/getData'
+import apiMain from 'api/apiMain'
+import getData from 'api/getData'
 import { Link } from 'react-router-dom'
-import { loginSuccess } from '../../redux/authSlice'
 import "./Chapter.scss"
 import { ListChapter } from '../StoryDetail/StoryDetail'
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'react-toastify'
 
-function Chapter(props) {
+function Chapter() {
     const { chapnum, url } = useParams()
     const [chapter, setChapter] = useState({})
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
     const [manual, setManual] = useState("")
-    const user = useSelector(state => state.auth.login?.user)
-    const dispatch = useDispatch()
+    const user = useSelector(state => state.user.info)
     const contentRef = useRef(null)
     const mainContentRef = useRef(null)
     const [styleManual, setStyleManual] = useState(null)
@@ -48,6 +46,7 @@ function Chapter(props) {
             setStyleManual(tmp)
         }
         window.addEventListener('resize', changeStyleManual)
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
         return () => {
             window.removeEventListener('resize', changeStyleManual)
         }
@@ -57,7 +56,7 @@ function Chapter(props) {
     useEffect(() => {//Xử lý load dữ liệu chương truyện
         const getChapter = async () => {//tạo hàm
             if (user) {
-                apiMain.getChapterByNumberAndSetReading(url, chapnum, user, dispatch, loginSuccess)
+                apiMain.getChapterByNumber(url, chapnum)
                     .then(res => {
                         setChapter(getData(res))
                     })
@@ -81,6 +80,7 @@ function Chapter(props) {
         }
         getChapter()//gọi hàm
         setManual("")
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [chapnum])
 
     useEffect(()=>{
@@ -92,10 +92,10 @@ function Chapter(props) {
                 
                     let index = readings.findIndex(item=>item.url===url)
                     const newReading = {
-                        tentruyen:truyen.tentruyen,
+                        name:truyen.name,
                         url,
-                        hinhanh:truyen.hinhanh,
-                        chapnumber:Number(chapnum),
+                        image:truyen.image,
+                        chapternumber:Number(chapnum),
                         sochap:truyen.sochap
                     }
                     if(index!==-1){
@@ -110,6 +110,7 @@ function Chapter(props) {
                 localStorage.setItem("readings",JSON.stringify(readings))
             }
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
     },[truyen])
 
     useEffect(()=>{
@@ -120,7 +121,6 @@ function Chapter(props) {
             })
         } 
         getStory()
-        console.log(url)
     },[url])
 
 

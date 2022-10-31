@@ -1,15 +1,9 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
-import {   useLocation, Route, Routes } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import apiMain from '../../api/apiMain';
-import { loginSuccess, logoutSuccess } from '../../redux/authSlice';
-import { useSelector, useDispatch } from 'react-redux'
-import getData from '../../api/getData';
+import { Route, Routes } from 'react-router-dom';
 import ChangePassword from './ChangePassword'
 import Profile from './Profile';
 import TuTruyen from './TuTruyen/TuTruyen';
-import { toast } from 'react-toastify';
 import CreateNovel from './CreateNovel';
 import './Account.scss'
 import './Profile.scss'
@@ -38,40 +32,13 @@ const menu = [//menu dựa trên từng loại tài khoản
   ]
 function Account() {
   
-  
-  const [userInfo, setUserInfo] = useState(null)
-  const user = useSelector(state => state.auth.login?.user);
-  const { pathname } = useLocation();
-  const dispatch = useDispatch();
-  const active = menu.findIndex(e => e.path === pathname.split('/')[2]);
-
-  useEffect(() => {
-    const getUser = async () => {//xử lý load thông tin user
-      try {
-        const res = getData(await apiMain.getUserInfo(user, dispatch, loginSuccess));
-        setUserInfo(res.userInfo)
-      } catch (err) {
-        if (err.response.status === 403 || err.response.status === 401) {
-          dispatch(logoutSuccess())
-        }
-        else {
-          toast.error("Lỗi thông tin")
-        }
-      }
-    }
-    getUser()
-  }, [user, dispatch])
-
-  const changeUserInfo = useCallback((data) => {
-    setUserInfo(data)
-  },[])
   return (
     <Panel menu={menu}>
       <Routes>
-        <Route path='profile' element={<Profile userInfo={userInfo} changeUserInfo={changeUserInfo} />}></Route>
+        <Route path='profile' element={<Profile/>}></Route>
         <Route path='change-password' element={<ChangePassword />}></Route>
-        <Route path='tu-truyen/*' element={<TuTruyen userInfo={userInfo} />}></Route>
-        <Route path='dang-truyen' element={<CreateNovel userInfo={userInfo} />}></Route>
+        <Route path='tu-truyen/*' element={<TuTruyen />}></Route>
+        <Route path='dang-truyen' element={<CreateNovel />}></Route>
       </Routes>
     </Panel>
 

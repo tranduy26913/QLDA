@@ -1,13 +1,14 @@
 import  { useEffect, useState } from 'react'
-import apiMain from '../../../../api/apiMain'
-import { loginSuccess } from '../../../../redux/authSlice'
-import Saved from '../../../../components/Saved/Saved'
-const Saveds = ({ dispatch,user }) => {
+import apiMain from 'api/apiMain'
+import Saved from 'components/Saved/Saved'
+import { useSelector } from 'react-redux'
+const Saveds = () => {
     const [readings, setReadings] = useState([])
+    const user = useSelector(state=>state.user.info)
     useEffect(()=>{
       const LoadReading = async () => {
         if (user) {
-          apiMain.getSaveds(user, dispatch, loginSuccess)
+          apiMain.getSaveds()
             .then(res => {
               console.log(res)
               setReadings(res)
@@ -18,7 +19,7 @@ const Saveds = ({ dispatch,user }) => {
         }
       }
       LoadReading()
-    }, [user,dispatch])
+    }, [user])
   
     return (
       <div>

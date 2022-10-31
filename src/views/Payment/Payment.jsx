@@ -30,7 +30,7 @@ const data = [
 ];
 const Payment = () => {
 
-  const user = useSelector(state=>state.auth.login.user)
+  const user = useSelector(state=>state.user.info)
 
   const redirectMomo = (amount) => {
     makePaymentMomo({ orderId: uuidv4(), amount,username:user.username }).then((result) => {

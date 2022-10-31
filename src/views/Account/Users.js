@@ -74,14 +74,14 @@ function Users(props) {
 
   const closeModalRole = useCallback(()=>{
     setModalRole(false)
-  })
+  },[])
   const hideMenu =(e)=>{
     setChoose(null)
   }
 
   useEffect(() => {
     const loadUsers = async()=>{
-      apiMain.getAllUser(user, props.dispatch, loginSuccess)
+      apiMain.getAllUser(user, dispatch, loginSuccess)
       .then(res=>{
         setListUser(res)
       })
@@ -89,7 +89,8 @@ function Users(props) {
         console.log(err)
       })
     }
-    loadUsers();   
+    loadUsers(); 
+     // eslint-disable-next-line react-hooks/exhaustive-deps   
   }, [])
 
   return (
@@ -119,16 +120,16 @@ function Users(props) {
                   <td id={`roles-${item.username}`}>{item.roles?.map(e=>e.name).join(', ') || ""}</td>
                   <td tabIndex={index} onBlur={hideMenu}>
                     <div  className='d-flex user__item' >
-                      <a className='ma' id={item.username}  onClick={onClickShow} >
+                      <p style={{'cursor':'pointer'}} className='ma' id={item.username}  onClick={onClickShow} >
                         <i id={item.username} name={item.username}  className="ma fs-20 bx bx-dots-horizontal-rounded"></i>
-                        </a>
+                        </p>
                     </div>
                     <div className={`user__menu ${choose===item.username?'active':''}`}>
                       <ul>
-                        <li><a key={item.active} name={item.username} onClick={item.active?onClickInActive:onClickActive}>
-                          {item.active?'Khoá tài khoản':'Kích hoạt'}</a></li>
-                        <li><a name={item.username} onClick={onClickRole}>Cấp quyền</a></li>
-                        <li><a name={item.username} onClick={onClickDelete}>Xoá</a></li>
+                        <li><p style={{'cursor':'pointer'}} key={item.active} name={item.username} onClick={item.active?onClickInActive:onClickActive}>
+                          {item.active?'Khoá tài khoản':'Kích hoạt'}</p></li>
+                        <li><p style={{'cursor':'pointer'}} name={item.username} onClick={onClickRole}>Cấp quyền</p></li>
+                        <li><p style={{'cursor':'pointer'}} name={item.username} onClick={onClickDelete}>Xoá</p></li>
                       </ul>
                     </div>
                   

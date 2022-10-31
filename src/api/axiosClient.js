@@ -6,8 +6,8 @@ import getData from './getData';
 import { toast } from 'react-toastify';
 import { logoutSuccess } from '../redux/authSlice';
 //const baseURL='https://thichtruyenchu.herokuapp.com/api'
-//const baseURL = 'http://localhost:5000/api'
-const baseURL = 'https://becnpmm.vercel.app/api'
+const baseURL = 'http://localhost:5000/api'
+//const baseURL = 'https://becnpmm.vercel.app/api'
 export const axiosClient = axios.create({
     baseURL: baseURL,
 
@@ -34,25 +34,25 @@ const refreshToken = async (user) => {
 }
 
 var myInterceptor = null;
-export const axiosInstance2 = (user, dispatch, stateSuccess,stateFail) => {
+export const axiosInstance2 = (accessToken,refreshToken, dispatch, stateSuccess,stateFail) => {
     axiosClientWithToken.interceptors.request.eject(myInterceptor)
     myInterceptor = axiosClientWithToken.interceptors.request.use(
         async (config) => {
             let date = new Date();
-            if(!(user.refreshToken)){
+            if(!(refreshToken)){
                 return config;
             }
-            const decodeToken = jwt_decode(user.accessToken);
+            const decodeToken = jwt_decode(accessToken);
             
             if (decodeToken.exp < date.getTime() / 1000) {
                 try{
-                    const response = getData(await refreshToken(user.refreshToken))
+                    const response = getData(await refreshToken(refreshToken))
 
-                    const newUser = {
-                        ...user,
-                        accessToken: response.accessToken
+                    const newToken = {
+                        accessToken: response.accessToken,
+                        refreshToken: response.refreshToken
                     }
-                    dispatch(stateSuccess(newUser))
+                    dispatch(stateSuccess(newToken))
                     config.headers['Authorization'] = `Bearer ${response.accessToken}`;
                 }
                 catch(err){
@@ -61,7 +61,7 @@ export const axiosInstance2 = (user, dispatch, stateSuccess,stateFail) => {
                     dispatch(stateFail())
                 }
             }else{
-                config.headers['Authorization'] = `Bearer ${user.accessToken}`;
+                config.headers['Authorization'] = `Bearer ${accessToken}`;
             }
             return config;
         },

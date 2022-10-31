@@ -1,11 +1,5 @@
 
 import {  Route, Routes } from 'react-router-dom';
-import { useCallback } from 'react';
-import { useEffect, useState } from 'react';
-import apiMain from '../../api/apiMain';
-import { loginSuccess } from '../../redux/authSlice';
-import { useSelector, useDispatch } from 'react-redux'
-import getData from '../../api/getData';
 import ChangePassword from './ChangePassword'
 import Profile from './Profile';
 import Users from './Users'
@@ -49,30 +43,14 @@ const menu = [
 ]
 function Account() {
 
-  const user = useSelector(state => state.auth.login?.user);
-  const [userInfo, setUserInfo] = useState(null);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const res = getData(await apiMain.getUserInfo(user, dispatch, loginSuccess));
-      setUserInfo(res.userInfo)
-    }
-    getUser()
-  }, [user,dispatch])
-
-
-  const changeUserInfo = useCallback((data) => {
-    setUserInfo(data)
-  },[])
   return (
     <Panel menu={menu}>
       <Routes>
-        <Route path='profile' element={<Profile userInfo={userInfo} changeUserInfo={changeUserInfo} />}></Route>
+        <Route path='profile' element={<Profile/>}></Route>
         <Route path='change-password' element={<ChangePassword />}></Route>
-        <Route path='users' element={<Users dispatch={dispatch} />}></Route>
-        <Route path='tu-truyen/*' element={<TuTruyen userInfo={userInfo} />}></Route>
-        <Route path='dang-truyen' element={<CreateNovel userInfo={userInfo} />}></Route>
+        <Route path='users' element={<Users />}></Route>
+        <Route path='tu-truyen/*' element={<TuTruyen />}></Route>
+        <Route path='dang-truyen' element={<CreateNovel  />}></Route>
       </Routes>
     </Panel>
 
