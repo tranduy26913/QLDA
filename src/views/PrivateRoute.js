@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'
 import { toast } from 'react-toastify';
-import { loginSuccess,logoutSuccess } from '../redux/authSlice';
+import { logoutSuccess } from '../redux/authSlice';
 import { useEffect, useState } from 'react';
 //Component tạo một định tuyến an toàn, khi muốn truy cập các đường dẫn cần có xác thực thì phải đi qua route này
 const PrivateRoute = ({
@@ -45,6 +45,7 @@ const PrivateRoute = ({
             }
         }
         verify()
+         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [])
     if (auth === null) return <></>
     return auth === true ? <Outlet /> : <Navigate to="/" state={{ from: location }} />;

@@ -1,13 +1,9 @@
-import { useEffect, useState, useRef } from 'react'
+import { useRef } from 'react'
 import PropTypes from 'prop-types'
 import './Modal.scss'
 
 const Modal = props => {
-    const [active, setActive] = useState(false);
-
-    useEffect(() => {
-        setActive(props.active);
-    }, [props.active]);
+    
 
     return (
         <div className={`modal ${props.active ? 'active' : ''}`} style={props.style}>

@@ -45,10 +45,10 @@ const [newUpdate,setNewUpdate]  = useState(Array.from(Array(10).keys(),i=>undefi
                     <td className='w-25'>
                       <Link to={`truyen/${item.url}/${item.chapternumber}`}><span className='text-overflow-1-lines'>{item.chaptername}</span></Link>
                     </td>
-                    <td><span className='text-overflow-1-lines'>{item.tacgia}</span></td>
-                    <td><span className='text-overflow-1-lines text-secondary'>{item.author}</span></td>
+                    <td><span className='text-overflow-1-lines'>{item.author}</span></td>
+                    <td><span className='text-overflow-1-lines text-secondary'>{item.uploader}</span></td>
                     <td><span className='text-overflow-1-lines text-secondary'>
-                      {moment(item.updateAt).fromNow()}</span></td></>
+                      {moment(item.updatedAt).fromNow()}</span></td></>
                       :<td>
                         <Skeleton height={16}/></td>
 }

@@ -23,6 +23,7 @@ function Auth(props) { //component đăng nhập và đăng ký
   useEffect(() => {
     setLogin(props.choose);
     dispatch(setLoading(false))
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChooseLogin = () => {
@@ -30,15 +31,15 @@ function Auth(props) { //component đăng nhập và đăng ký
   }
   const handleChooseRegister = useCallback(() => {
     setLogin(false)
-  })
+  },[])
 
   const onClickForgetpw = useCallback(() => {
     setIsforgetPasswordForm(true)
-  })
+  },[])
 
   const onClickActive = useCallback(() => {
     setIsActiveForm(true)
-  })
+  },[])
 
   return (
 
@@ -49,8 +50,8 @@ function Auth(props) { //component đăng nhập và đăng ký
             <div>
               <div className="auth-header">
                 <ul>
-                  <li><a onClick={handleChooseLogin}>Đăng nhập</a></li>
-                  <li><a onClick={handleChooseRegister}>Đăng ký</a></li>
+                  <li style={{cursor:'pointer'}} onClick={handleChooseLogin}>Đăng nhập</li>
+                  <li  style={{cursor:'pointer'}}onClick={handleChooseRegister}>Đăng ký</li>
                 </ul>
               </div>
               <div className="auth-body">
@@ -69,20 +70,22 @@ function Auth(props) { //component đăng nhập và đăng ký
 
 const Login = props => {
   const loading = useSelector(state => state.message.loading)
-
+const dispatch = useDispatch()
+const navigate = useNavigate()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const msgLogin = useSelector(state => state.message.login?.msg)
 
   useEffect(() => {
     if (msgLogin)
-      props.dispatch(clearMessageLogin())
+      dispatch(clearMessageLogin())
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onLogin = async (e) => {//xử lý đăng nhập
     e.preventDefault();
     const user = { username, password };//payload
-    await handleLogin(user, props.dispatch, props.navigate);//gọi hàm handle 
+    await handleLogin(user, dispatch, navigate);//gọi hàm handle 
   }
   return (
     <div className="form-wrap">

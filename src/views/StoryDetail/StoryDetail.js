@@ -54,8 +54,7 @@ function StoryDetail() {
   const [handling, setHandling] = useState(false)
   const [saved, setSaved] = useState(false)
   const [listchapter, setListchapter] = useState(false)
-  const user = useSelector(state => state.auth.login?.user)
-  const dispatch = useDispatch();
+  const user = useSelector(state => state.user.info)
   useEffect(() => {//load truyện
     const getStory = async () => {
       let params = { url }
@@ -93,7 +92,7 @@ function StoryDetail() {
     const checkSaved = async () => {
       if (user) {
         setHandling(true)
-        apiMain.checkSaved(user, dispatch, loginSuccess, { url })
+        apiMain.checkSaved({ url })
           .then(res => {
             setSaved(res.saved || false)
           })
@@ -101,7 +100,7 @@ function StoryDetail() {
       }
     }
     checkSaved();
-  }, [user, url, dispatch])
+  }, [user, url])
 
   const onClickTab = async (e) => {
     setTab(e.target.getAttribute("data"))
@@ -110,7 +109,7 @@ function StoryDetail() {
   const onClickSaved = async (e) => {
     if (user) {
       setHandling(true)
-      apiMain.savedStory(user, dispatch, loginSuccess, { url })
+      apiMain.savedStory( { url })
         .then(res => {
           setSaved(true)
         })
@@ -124,7 +123,7 @@ function StoryDetail() {
     if (user) {
       setHandling(true)
       try {
-        const response = await apiMain.unsavedStory(user, dispatch, loginSuccess, { url })
+        const response = await apiMain.unsavedStory({ url })
         if (response) {
           setSaved(false)
         }
@@ -292,6 +291,7 @@ export const ListChapter = props => {
       })
     }
     loadList()//gọi hàm
+     // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [props.url, currentPage])
 
   const handleChapterLock = (e,id,chapnumber) => {

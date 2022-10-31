@@ -3,9 +3,9 @@ import { toast } from "react-toastify"
 import { getMessage } from "../lang/lang"
 import {setLoading} from '../redux/messageSlice'
 
-export const handleChangePassword = async (user, dispatch, loginSuccess, params) => {
+export const handleChangePassword = async (dispatch, params) => {
     dispatch(setLoading(true))
-    apiMain.ChangePassword(user, dispatch, loginSuccess, params).then(res => {
+    apiMain.ChangePassword(params).then(res => {
         toast.success("Đổi mật khẩu thành công", {
             autoClose: 1000,
             hideProgressBar: true,

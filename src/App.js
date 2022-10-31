@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Home from "./views/Home/Home";
@@ -19,22 +19,26 @@ import ResultPayment from "views/ResultPayment/ResultPayment";
 import {useDispatch,useSelector} from 'react-redux'
 import {loginSuccess, logoutSuccess} from './redux/authSlice'
 import {axiosInstance2} from './api/axiosClient'
+import CheckAuthentication from "components/CheckAuthentication/CheckAuthentication";
 function App() {
-  const user = useSelector(state => state.auth.login?.user)
+  const refreshToken = useSelector((state) => state.auth.refreshToken);
+  const accessToken = useSelector((state) => state.auth.accessToken);
   const dispatch = useDispatch();
-  if (user) {
-    axiosInstance2(user, dispatch, loginSuccess, logoutSuccess);
-
+  
+ 
+  if (accessToken && refreshToken) {
+    axiosInstance2(accessToken,refreshToken, dispatch, loginSuccess, logoutSuccess);
   }
   return (
-    <HashRouter>
+    <BrowserRouter>
+    <CheckAuthentication>
+
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="truyen/:url" element={<StoryDetail />} />
-        <Route element={<PrivateRoute roles={["USER"]} />}>
+       
           <Route path="/user/*" element={<Account />} />
-        </Route>
         <Route element={<PrivateRoute roles={["ADMIN"]} />}>
           <Route path="admin/*" element={<Admin />} />
         </Route>
@@ -46,6 +50,7 @@ function App() {
         <Route path="result-payment" element={<ResultPayment />} />
       </Routes>
       <Footer />
+    </CheckAuthentication>
       <ToastContainer
         autoClose={1000}
         hideProgressBar
@@ -54,7 +59,7 @@ function App() {
         pauseOnFocusLoss
         pauseOnHover={false}
       />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

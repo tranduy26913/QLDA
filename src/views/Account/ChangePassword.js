@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginSuccess, logoutSuccess } from '../../redux/authSlice'
 import Loading from '../../components/Loading/Loading'
-import { toast } from 'react-toastify'
 import { handleChangePassword } from '../../handle/handleAccount'
 
 function ChangePassword() {
@@ -13,7 +11,6 @@ function ChangePassword() {
     const [msgNewPW, setMsgNewPW] = useState("")
     const [msgNewCfPW, setMsgCfNewPW] = useState("")
     const [valid, setValid] = useState({ new: false, cf: false });
-    const user = useSelector(state => state.auth.login?.user)
     const dispatch = useDispatch();
     const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");//regex kiểm tra mật khẩu hợp lệ
 
@@ -32,7 +29,7 @@ function ChangePassword() {
     }
     const onChangeNewCfPW = (e) => {//xử lý nhập mật khẩu xác nhận
         setNewCfPW(e.target.value)
-        if (newPW.localeCompare(e.target.value) == 0) {
+        if (newPW.localeCompare(e.target.value) === 0) {
             setMsgCfNewPW("Trùng khớp")
             setValid(pre => { return { ...pre, cf: true } })
         }
@@ -51,7 +48,7 @@ function ChangePassword() {
                 newPassword: newPW,
                 password: currentPW
             }
-            handleChangePassword(user,dispatch,loginSuccess,params);//gọi hàm xử lý
+            handleChangePassword(dispatch,params);//gọi hàm xử lý
         }
     }
 

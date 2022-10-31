@@ -9,7 +9,7 @@ import "./Comment.scss"
 
 function Comment(props) {
     const [count, setCount] = useState(0);
-    const user = useSelector(state => state.auth.login?.user)
+    const user = useSelector(state => state.user.info)
     const [comments, setComments] = useState([])
     const [content, setContent] = useState("")
     const url = props.url
@@ -18,11 +18,12 @@ function Comment(props) {
     const onClickCreateComment = async (e) => { //xử lý đăng bình luận mới
         if (user) {
             const params = { urltruyen:url, content,parentId:"" }//payload
-            apiMain.createComment(user, params, dispatch, loginSuccess)//gọi API đăng comment
+            apiMain.createComment(params)//gọi API đăng comment
                 .then(res => {
                     console.log(res)
                     setComments(pre => [res.comment||res, ...pre])
                     setContent("")
+                    setCount(pre=>pre+1)
                 })
                 .catch(err => {
                     console.log(err)
@@ -51,11 +52,11 @@ function Comment(props) {
     useEffect(() => {//load comment khi component đc render
         const loadComment = async () => {
             const data = await getComments()
-            console.log(data)
             setCount(data?.length || 0)
             setComments(data)
         }
         loadComment();
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     
@@ -68,6 +69,7 @@ function Comment(props) {
                     toast.success(res.message, { hideProgressBar: true, pauseOnHover: false, autoClose: 1000 })
                     const data = await getComments()
                     setComments(data)
+                    setCount(pre=>pre-1)
                 })
                 .catch(err => {
                     toast.error(err.response.data.detail.message, { hideProgressBar: true, pauseOnHover: false, autoClose: 1000 })

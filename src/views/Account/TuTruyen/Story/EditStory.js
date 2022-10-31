@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import apiMain from '../../../../api/apiMain'
-import { loginSuccess } from '../../../../redux/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import apiMain from 'api/apiMain'
 import { toast } from 'react-toastify'
-import avt from '../../../../assets/img/avt.png'
+import avt from 'assets/img/avt.png'
 import { storage } from '../../../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { setLoading } from '../../../../redux/messageSlice'
-import Loading from '../../../../components/Loading/Loading';
-import LoadingData from '../../../../components/LoadingData/LoadingData'
+import { setLoading } from 'redux/messageSlice'
+import Loading from 'components/Loading/Loading';
+import LoadingData from 'components/LoadingData/LoadingData'
 
-function EditStory({ url, user, dispatch, onClickBackFromEditNovel }) {
+function EditStory({ url, onClickBackFromEditNovel }) {
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
@@ -21,18 +20,18 @@ function EditStory({ url, user, dispatch, onClickBackFromEditNovel }) {
     const loading = useSelector(state => state.message.loading)
     const [loadingStory, setLoadingStory] = useState(true)
     const types = ["Tiên hiệp", "Dã sử", "Kì ảo", "Kiếm hiệp", "Huyền huyễn", "Khoa huyễn"]
-
+const dispatch = useDispatch()
 
     useEffect(() => {
         const LoadStory = async () => {
             if (url) {
                 apiMain.getStory({ url })
                     .then(res => {
-                        setPreview(res.hinhanh)
-                        setName(res.tentruyen)
-                        setDescription(res.noidung)
-                        setTheloai(res.theloai)
-                        setTacgia(res.tacgia)
+                        setPreview(res.image)
+                        setName(res.name)
+                        setDescription(res.description)
+                        setTheloai(res.type)
+                        setTacgia(res.author)
                         setId(res._id)
                         setLoadingStory(false)
                     })
@@ -45,7 +44,7 @@ function EditStory({ url, user, dispatch, onClickBackFromEditNovel }) {
 
     const handleEditStory = async (data) => {
         try {
-            apiMain.updateStory(data, user, dispatch, loginSuccess)
+            apiMain.updateStory(data)
                 .then(res => {
                     console.log(res)
                     toast.success("Sửa truyện thành công", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
