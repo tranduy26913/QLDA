@@ -15,7 +15,7 @@ function Chapter() {
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
     const [manual, setManual] = useState("")
-    const user = useSelector(state => state.user.info)
+    const accessToken = useSelector(state => state.auth.accessToken)
     const contentRef = useRef(null)
     const mainContentRef = useRef(null)
     const [styleManual, setStyleManual] = useState(null)
@@ -55,13 +55,13 @@ function Chapter() {
 
     useEffect(() => {//Xử lý load dữ liệu chương truyện
         const getChapter = async () => {//tạo hàm
-            if (user) {
+            if (accessToken) {
                 apiMain.getChapterByNumber(url, chapnum)
                     .then(res => {
                         setChapter(getData(res))
                     })
                     .catch(err => {
-                        console.log(err.response)
+                        console.log(err)
                         if(err.response.data.details.message ==='Bạn chưa mở khoá chương'){
                         toast.warning('Bạn chưa mở khoá chương')
                         navigate('/truyen/'+url)

@@ -20,6 +20,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import {loginSuccess, logoutSuccess} from './redux/authSlice'
 import {axiosInstance2} from './api/axiosClient'
 import CheckAuthentication from "components/CheckAuthentication/CheckAuthentication";
+import ScrollToTop from "components/ScrollToTop";
 function App() {
   const refreshToken = useSelector((state) => state.auth.refreshToken);
   const accessToken = useSelector((state) => state.auth.accessToken);
@@ -34,14 +35,16 @@ function App() {
     <CheckAuthentication>
 
       <Header />
+      <ScrollToTop>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="truyen/:url" element={<StoryDetail />} />
        
-          <Route path="/user/*" element={<Account />} />
-        <Route element={<PrivateRoute roles={["ADMIN"]} />}>
+        <Route path="/user/*" element={<Account />} />
+        {/* <Route element={<PrivateRoute roles={["ADMIN"]} />}>
           <Route path="admin/*" element={<Admin />} />
-        </Route>
+        </Route> */}
         <Route path="active/:token" element={<Active />} />
         <Route path="truyen/:url/:chapnum" element={<Chapter />} />
         <Route path="tim-kiem" element={<Search />} />
@@ -49,6 +52,7 @@ function App() {
         <Route path="payment" element={<Payment />} />
         <Route path="result-payment" element={<ResultPayment />} />
       </Routes>
+      </ScrollToTop>
       <Footer />
     </CheckAuthentication>
       <ToastContainer

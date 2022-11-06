@@ -14,6 +14,7 @@ import Loading from '../../components/Loading/Loading'
 import Modal, { ModalContent } from '../../components/Modal/Modal'
 import {unlockChapter} from 'api/apiPayment'
 import getData from 'api/getData'
+import { setUserInfo, updateBalance } from 'redux/userSlice'
 
 const nav = [//navigate
   {
@@ -171,7 +172,7 @@ function StoryDetail() {
                     <span>Chương</span>
                   </li>
                   <li>
-                    <span className='fs-16 bold'>{truyen?.luotdoc || '0'}</span>
+                    <span className='fs-16 bold'>{truyen?.reads || '0'}</span>
                     <span>Lượt đọc</span>
                   </li>
 
@@ -274,7 +275,7 @@ export const ListChapter = props => {
   const [chapnum,setChapnum] = useState(1)
   const size = 20;
   const url = props.url
-  const user = useSelector(state => state.auth.login?.user)
+  const user = useSelector(state => state.user.info)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -325,9 +326,9 @@ export const ListChapter = props => {
   }
 
   const updateUser = async()=>{
-    const res = getData(await apiMain.getUserInfo(user, dispatch, loginSuccess));
+    const res = getData(await apiMain.getUserInfo());
     const {balance} = res.userInfo
-    dispatch(loginSuccess({...user,balance}))
+    dispatch(updateBalance(balance))
   }
 
   return (
