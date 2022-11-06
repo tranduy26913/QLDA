@@ -8,6 +8,7 @@ import CreateNovel from './CreateNovel';
 import './Account.scss'
 import './Profile.scss'
 import Panel from './Panel'
+import ListBill from './ListBill';
 const menu = [//menu dựa trên từng loại tài khoản
     {
       path: "user/profile",
@@ -29,6 +30,11 @@ const menu = [//menu dựa trên từng loại tài khoản
       display: "Đăng truyện",
       icon: "bx bx-up-arrow-circle"
     },
+    {
+      path: "user/thanh-toan",
+      display: "Thanh toán",
+      icon: "bx bx-up-arrow-circle"
+    },
   ]
 function Account() {
   
@@ -39,6 +45,7 @@ function Account() {
         <Route path='change-password' element={<ChangePassword />}></Route>
         <Route path='tu-truyen/*' element={<TuTruyen />}></Route>
         <Route path='dang-truyen' element={<CreateNovel />}></Route>
+        <Route path='thanh-toan' element={<ListBill />}></Route>
       </Routes>
     </Panel>
 

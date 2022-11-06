@@ -9,6 +9,7 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
   const [content, setContent] = useState("")
   const [tenchuong, setTenchuong] = useState("")
   const [edit, setEdit] = useState(false)
+  const [isLock, setIsLock] = useState(false)
 
   const onChangeTenchuong = (e) => {
     setTenchuong(e.target.value)
@@ -22,6 +23,7 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
             setContent(res.content)
             setTenchuong(res.chaptername)
             setEdit(true)
+            setIsLock(res.isLock)
           })
       }
     }
@@ -29,7 +31,7 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
   }, [url, chapnumber])
 
   const onClickAddChapter = async (e) => {
-    const params = { content, tenchap: tenchuong, url }
+    const params = { content, tenchap: tenchuong, url,isLock }
     if (content.length <= 10) {
       toast.warning("Nội dung chương phải dài hơn 10 kí tự");
       return
@@ -43,7 +45,7 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
   }
 
   const onClickEditChapter = async (e) => {
-    const params = { content, tenchap: tenchuong, url, chapnumber }
+    const params = { content, tenchap: tenchuong, url, chapnumber ,isLock}
     if (content.length <= 10) {
       toast.warning("Nội dung chương phải dài hơn 10 kí tự");
       return
@@ -58,11 +60,15 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
   const labelStyle = { 'minWidth': '100px', 'margin': '5px 0px', 'display': 'inline-block' }
   return (<>
     <div>
-      <span className='text-with-icon' onClick={onClickBackFromAddChap}><i className="fa-solid fa-angle-left"></i> Danh sách chương</span>
+      <span className='text-with-icon' onClick={onClickBackFromAddChap}><i className='bx bx-left-arrow'></i> Danh sách chương</span>
     </div>
     <div className="group-info" style={{ 'marginBottom': '10px' }}>
       <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
       <input onChange={onChangeTenchuong} value={tenchuong || ""} />
+    </div>
+    <div  className='d-flex' style={{ 'marginBottom': '10px', gap:'6px'}}>
+      <input  name='isLock' type='checkbox' checked={isLock} onChange={()=>setIsLock(pre=>!pre)} value={isLock} />
+      <label htmlFor="isLock" className='fs-16' style={labelStyle}>Khoá chương (Tính phí 200coin)</label>
     </div>
     <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
     <CKEditor
@@ -82,6 +88,8 @@ const AddChapter = ({ url, chapnumber, onClickBackFromAddChap, getChapters }) =>
         console.log('Focus.', editor);
       }}
     />
+   
+
     <div className='d-flex'>
       {
         edit ? <button className='btn-primary' onClick={onClickEditChapter} style={{ 'margin': '20px auto' }}>Cập nhật chương</button>

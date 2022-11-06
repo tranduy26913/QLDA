@@ -129,6 +129,10 @@ const apiMain = {
         let axi = axiosInstance(user, dispatch, stateSuccess)
         return getData(await axi.get(url, { headers: { Authorization: `Bearer ${user.accessToken}` }, }));
     },
+    getBillByUser: async () => {
+        const url = 'statistic/get-bill-byuser'
+        return getData(await axiosClientWithToken.get(url));
+    },
 
     refreshToken: async (user) => {
         const params = { refreshToken: user.refreshToken }
@@ -136,7 +140,7 @@ const apiMain = {
         return res.data
     },
 
-    getUserInfo: async (user, dispatch, stateSuccess) => {
+    getUserInfo: async () => {
         return (await axiosClientWithToken.get('/user/info')).data;
     },
     updateUserInfo: async ( params) => {

@@ -159,7 +159,7 @@ form {
     cursor: pointer;
 }
 
-input,
+input:not([type='checkbox']),
 select {
     border: 1px solid rgba(148, 148, 148, 0.541);
     outline-color: $main-color;
