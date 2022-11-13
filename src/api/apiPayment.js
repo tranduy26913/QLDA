@@ -5,6 +5,10 @@ export const makePaymentMomo = async (params) => {
   const res = await axiosClientWithToken.post("/payment/create-payment", params);
   return res.data;
 };
+export const makePaymentVNPay = async (params) => {
+  const res = await axiosClientWithToken.post("/payment/create-vnp-payment", params);
+  return res.data;
+};
 
 export const getInfoWithBalance = async (user) => {
   const res = await axiosClientWithToken.post("/user/info-balance", {});

@@ -1,5 +1,5 @@
 import "./Payment.style.scss";
-import { makePaymentMomo } from "api/apiPayment";
+import { makePaymentMomo, makePaymentVNPay } from "api/apiPayment";
 import React, { Fragment } from "react";
 import Layout from "components/Layout/Layout";
 import { v4 as uuidv4 } from "uuid";
@@ -44,12 +44,24 @@ const Payment = () => {
     });
     console.log("Thanh toán ");
   };
+  const redirectVNPay = (amount) => {
+    makePaymentVNPay({ orderId: uuidv4(), amount,username:user.username }).then((result) => {
+      if (result.payUrl) {
+        window.location.replace(result.payUrl);
+      } else {
+        toast.warning(
+          "Có lỗi trong quá trình giao dịch, vui lòng thực hiện lại"
+        );
+      }
+    });
+    console.log("Thanh toán ");
+  };
   return (
     <Fragment>
       <Layout>
         <div className="main-content">
           <div className="payment-section">
-            <h1 className="headline">Nạp thẻ với Momo</h1>
+            <h1 className="headline">Nạp thẻ</h1>
             <div className="payment-list">
               {data.map((item) => (
                 <div key={item.id} className="payment-item">
@@ -60,7 +72,13 @@ const Payment = () => {
                     className="paymen-item__button"
                     onClick={() => redirectMomo(item.amount)}
                   >
-                    Thanh toán
+                    Thanh toán với Momo
+                  </div>
+                  <div
+                    className="paymen-item__button"
+                    onClick={() => redirectVNPay(item.amount)}
+                  >
+                    Thanh toán với VNPay
                   </div>
                 </div>
               ))}
