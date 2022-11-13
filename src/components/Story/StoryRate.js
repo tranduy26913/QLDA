@@ -15,7 +15,7 @@ function Story(props) {
             <h2 className='story-card__tilte'><Link to={`truyen/${data.url}`}>{data['name']||<Skeleton />}</Link></h2>
             <div className="story-card__rate">{
               data.rating !== undefined?<>
-                <span className='story-card__rate__score'>{data.rating}</span>
+                <span className='story-card__rate__score'>{Number(data.rating).toFixed(1)}</span>
                 <span className='story-card__rate__count'>{`${data.numberofrating} đánh giá`}</span>
               </>:<Skeleton />
             }

@@ -1,3 +1,4 @@
+@use '../../scss/abstract/variables' as *;
 .LoadingData {
     justify-content: center;
     align-items: center;
@@ -17,7 +18,7 @@
     top: 30px;
     position: absolute;
     animation: ldio-86jo8zq5pla linear 1s infinite;
-    background: #d9561f;
+    background: $main-color;
     width: 20px;
     height: 20px;
     border-radius: 10px / 10px;
@@ -27,91 +28,91 @@
 .ldio-86jo8zq5pla div:nth-child(1) {
     transform: rotate(0deg);
     animation-delay: -0.9333333333333333s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(2) {
     transform: rotate(24deg);
     animation-delay: -0.8666666666666667s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(3) {
     transform: rotate(48deg);
     animation-delay: -0.8s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(4) {
     transform: rotate(72deg);
     animation-delay: -0.7333333333333333s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(5) {
     transform: rotate(96deg);
     animation-delay: -0.6666666666666666s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(6) {
     transform: rotate(120deg);
     animation-delay: -0.6s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(7) {
     transform: rotate(144deg);
     animation-delay: -0.5333333333333333s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(8) {
     transform: rotate(168deg);
     animation-delay: -0.4666666666666667s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(9) {
     transform: rotate(192deg);
     animation-delay: -0.4s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(10) {
     transform: rotate(216deg);
     animation-delay: -0.3333333333333333s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(11) {
     transform: rotate(240deg);
     animation-delay: -0.26666666666666666s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(12) {
     transform: rotate(264deg);
     animation-delay: -0.2s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(13) {
     transform: rotate(288deg);
     animation-delay: -0.13333333333333333s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(14) {
     transform: rotate(312deg);
     animation-delay: -0.06666666666666667s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .ldio-86jo8zq5pla div:nth-child(15) {
     transform: rotate(336deg);
     animation-delay: 0s;
-    background: #d9561f;
+    background: $main-color;
 }
 
 .loadingio-spinner-spinner-we6nz9vlz8 {
