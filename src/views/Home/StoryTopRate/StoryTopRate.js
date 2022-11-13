@@ -34,7 +34,8 @@ function StoryTopRate() {
             </SectionHeading>
             <SectionBody>
               <div className='row' style={{marginTop:-24}}>
-                {datas.map((data, index) => <div key={index} className='col-4 col-md-6 col-sm-12'><StoryRate  data={data} /></div>)}
+                {datas.map((data, index) => <div key={index} className='col-4 col-md-6 col-sm-12'>
+                  <StoryRate  data={data} /></div>)}
               </div>
             </SectionBody>
           </Section>

@@ -118,8 +118,21 @@ const apiMain = {
         return getData(await axiosClient.get(`/comment/${url}`,{params}));
     },
     deleteComment: async ( params) => {
-        const url = `/comment/${params.id}`
-        return getData(await axiosClientWithToken.delete(url));
+        const url = `/comment`
+        return getData(await axiosClientWithToken.delete(url,{params}));
+    },
+    ///Comment
+
+    createRating: async (params) => {
+        const url = `/rating`
+        return getData(await axiosClientWithToken.post(url, params));
+    },
+    getRatingsByUrl: async (url,params) => {
+        return getData(await axiosClient.get(`/rating/${url}`,{params}));
+    },
+    deleteRating: async ( params) => {
+        const url = `/rating/`
+        return getData(await axiosClientWithToken.delete(url,{params}));
     },
 
     ///user

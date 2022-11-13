@@ -15,6 +15,7 @@ import Modal, { ModalContent } from '../../components/Modal/Modal'
 import {unlockChapter} from 'api/apiPayment'
 import getData from 'api/getData'
 import { setUserInfo, updateBalance } from 'redux/userSlice'
+import Rating from 'components/Rating/Rating'
 
 const nav = [//navigate
   {
@@ -37,11 +38,11 @@ const nav = [//navigate
     display: 'Bình luận',
     mobile: 'show'
   },
-  {
-    path: 'donate',
-    display: 'Hâm mộ',
-    mobile: 'hide'
-  }
+  // {
+  //   path: 'donate',
+  //   display: 'Hâm mộ',
+  //   mobile: 'hide'
+  // }
 ]
 
 function StoryDetail() {
@@ -74,7 +75,7 @@ function StoryDetail() {
         setMain(<About key={'about'} truyen={truyen} />)
         break
       case 'rate':
-        setMain(<Rate key={'rate'} />)
+        setMain(<Rating key={'rate'}  url={truyen.url} />)
         break
       case 'chapter':
         setMain(<ListChapter key={'chapter'} url={truyen.url} totalPage={truyen.numberofchapter} />)
@@ -190,7 +191,7 @@ function StoryDetail() {
                     <span className={`bx ${truyen?.rating >= 3 ? 'bxs-star' : 'bx-star'}`}></span>
                     <span className={`bx ${truyen?.rating >= 4 ? 'bxs-star' : 'bx-star'}`}></span>
                     <span className={`bx ${truyen?.rating >= 5 ? 'bxs-star' : 'bx-star'}`}></span>
-                    <span>&nbsp;{truyen?.rating}/5   ({truyen?.numberofrating} đánh giá)</span>
+                    <span>&nbsp;{Number(truyen?.rating).toFixed(1)}/5   ({truyen?.numberofrating} đánh giá)</span>
                   </div>
 
                 </div>
