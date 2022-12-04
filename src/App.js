@@ -21,6 +21,8 @@ import {loginSuccess, logoutSuccess} from './redux/authSlice'
 import {axiosInstance2} from './api/axiosClient'
 import CheckAuthentication from "components/CheckAuthentication/CheckAuthentication";
 import ScrollToTop from "components/ScrollToTop";
+import { useEffect } from "react";
+import apiMain from "api/apiMain";
 function App() {
   const refreshToken = useSelector((state) => state.auth.refreshToken);
   const accessToken = useSelector((state) => state.auth.accessToken);
@@ -30,6 +32,9 @@ function App() {
   if (accessToken && refreshToken) {
     axiosInstance2(accessToken,refreshToken, dispatch, loginSuccess, logoutSuccess);
   }
+  useEffect(()=>{
+    apiMain.updateTraffic()
+  },[])
   return (
     <BrowserRouter>
     <CheckAuthentication>

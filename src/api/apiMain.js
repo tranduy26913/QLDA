@@ -196,5 +196,9 @@ const apiMain = {
     unsavedStory: async ( params) => {
         return getData(await axiosClientWithToken.delete(`/saved`,{data:params }));
     },
+
+    updateTraffic: async () => {
+        return getData(await axiosClientWithToken.post(`/traffic`));
+    },
 }
 export default apiMain;
